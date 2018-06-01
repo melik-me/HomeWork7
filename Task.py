@@ -1,7 +1,7 @@
 import unittest
 import requests
 
-class BookTests(unittest.TestCase):
+class BookTestsCreate(unittest.TestCase):
     def setUp(self):
         self.base_url = "http://pulse-rest-testing.herokuapp.com/books/"
         self.book_dict = {
@@ -16,6 +16,17 @@ class BookTests(unittest.TestCase):
         self.book_dict["id"] = resp_dict["id"]
         self.assertEqual(self.book_dict, resp_dict)
         requests.delete(self.base_url + "{}".format(self.book_dict["id"]))
+
+    def testCreateBookAgain(self):
+        response = requests.post(self.base_url, data=self.book_dict)
+        response = requests.post(self.base_url, data=self.book_dict)
+        self.assertEqual(response.status_code, 201)
+        resp_dict = response.json()
+        self.book_dict["id"] = resp_dict["id"]
+        id = str(int(self.book_dict["id"]) - 1)
+        self.assertEqual(self.book_dict, resp_dict)
+        requests.delete(self.base_url + "{}".format(self.book_dict["id"]))
+        requests.delete(self.base_url + "{}".format(id))
 
     def testCreateBookNoAuthor(self):
         dict = {
@@ -52,6 +63,16 @@ class BookTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
 
+
+class BookTestsRead(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/books/"
+        self.book_dict = {
+            "title": "Ender’s Game",
+            "author": "Orson Scott Card"
+        }
+
+
     def testReadBook(self):
         response = requests.post(self.base_url, data=self.book_dict)
         resp_dict = response.json()
@@ -75,6 +96,14 @@ class BookTests(unittest.TestCase):
         response = requests.get(url + str(self.book_dict["id"]))
         self.assertEqual(response.status_code, 404)
         requests.delete(self.base_url + "{}".format(self.book_dict["id"]))
+
+class BookTestsUpdate(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/books/"
+        self.book_dict = {
+            "title": "Ender’s Game",
+            "author": "Orson Scott Card"
+        }
 
     def testUpdateBook(self):
         response = requests.post(self.base_url, data=self.book_dict)
@@ -121,6 +150,14 @@ class BookTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         requests.delete(self.base_url + "{}".format(self.book_dict["id"]))
 
+class BookTestsDelete(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/books/"
+        self.book_dict = {
+            "title": "Ender’s Game",
+            "author": "Orson Scott Card"
+        }
+
     def testDeleteBook(self):
         response = requests.post(self.base_url, data=self.book_dict)
         resp_dict = response.json()
@@ -133,7 +170,7 @@ class BookTests(unittest.TestCase):
             self.assertNotEqual(book, self.book_dict)
 
 
-class RoleTests(unittest.TestCase):
+class RoleTestsCreate(unittest.TestCase):
     def setUp(self):
         self.base_url = "http://pulse-rest-testing.herokuapp.com/roles/"
         self.role_dict = {
@@ -150,6 +187,17 @@ class RoleTests(unittest.TestCase):
         self.role_dict["id"] = resp_dict["id"]
         self.assertEqual(self.role_dict, resp_dict)
         requests.delete(self.base_url + "{}".format(self.role_dict["id"]))
+
+    def testCreateRole(self):
+        response = requests.post(self.base_url, data=self.role_dict)
+        response = requests.post(self.base_url, data=self.role_dict)
+        self.assertEqual(response.status_code, 201)
+        resp_dict = response.json()
+        self.role_dict["id"] = resp_dict["id"]
+        id = str(int(self.role_dict["id"]) - 1)
+        self.assertEqual(self.role_dict, resp_dict)
+        requests.delete(self.base_url + "{}".format(self.role_dict["id"]))
+        requests.delete(self.base_url + "{}".format(id))
 
     def testCreateRoleNoName(self):
         dict = {
@@ -191,6 +239,15 @@ class RoleTests(unittest.TestCase):
         response = requests.post(url, data=self.role_dict)
         self.assertEqual(response.status_code, 404)
 
+class RoleTestsRead(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/roles/"
+        self.role_dict = {
+            "name": "Roland Deschain",
+            "type": "The Gunslinger",
+            "level": 80,
+            "book": 422
+        }
 
     def testReadRole(self):
         response = requests.post(self.base_url, data=self.role_dict)
@@ -215,6 +272,16 @@ class RoleTests(unittest.TestCase):
         response = requests.get(url + str(self.role_dict["id"]))
         self.assertEqual(response.status_code, 404)
         requests.delete(self.base_url + "{}".format(self.role_dict["id"]))
+
+class RoleTestsUpdate(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/roles/"
+        self.role_dict = {
+            "name": "Roland Deschain",
+            "type": "The Gunslinger",
+            "level": 80,
+            "book": 422
+        }
 
     def testUpdateRole(self):
         response = requests.post(self.base_url, data=self.role_dict)
@@ -260,6 +327,17 @@ class RoleTests(unittest.TestCase):
         response = requests.put(self.base_url + str(self.role_dict["id"]), data=dict)
         self.assertEqual(response.status_code, 200)
         requests.delete(self.base_url + "{}".format(self.role_dict["id"]))
+
+class RoleTestsDelete(unittest.TestCase):
+    def setUp(self):
+        self.base_url = "http://pulse-rest-testing.herokuapp.com/roles/"
+        self.role_dict = {
+            "name": "Roland Deschain",
+            "type": "The Gunslinger",
+            "level": 80,
+            "book": 422
+        }
+
 
     def testDeleteRole(self):
         response = requests.post(self.base_url, data=self.role_dict)

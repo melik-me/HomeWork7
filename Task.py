@@ -188,7 +188,7 @@ class RoleTestsCreate(unittest.TestCase):
         self.assertEqual(self.role_dict, resp_dict)
         requests.delete(self.base_url + "{}".format(self.role_dict["id"]))
 
-    def testCreateRole(self):
+    def testCreateRoleAgain(self):
         response = requests.post(self.base_url, data=self.role_dict)
         response = requests.post(self.base_url, data=self.role_dict)
         self.assertEqual(response.status_code, 201)
